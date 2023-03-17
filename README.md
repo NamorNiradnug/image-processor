@@ -1,2 +1,5 @@
 # image-processor
-Educational project: CLI image processor. Apply various filters from your command line!
+
+Educational project (HSE, Faculty of CS, AMI, C++ course): CLI image processor. Apply various filters from your command line!
+
+![screenshot](screenshot.png)
