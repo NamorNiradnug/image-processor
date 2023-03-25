@@ -78,7 +78,6 @@ public:
 };
 
 static void ValidateBMPHeader(const BmpHeader& bmp_header) {
-    using namespace std::literals;
     if (bmp_header.id[0] != 'B' || bmp_header.id[1] != 'M') {
         throw InvalidHeader("invalid BMP file ID: " + std::string(bmp_header.id, 2));
     }
@@ -134,7 +133,7 @@ Image LoadImage(const char* path) {
             const auto red = Read<uint8_t>(image_stream);
             image.At(x, image_height > 0 ? image_height - y - 1 : y) = {red, green, blue};
         }
-        image_stream.ignore(static_cast<int>((image_width * 3) % 4));
+        image_stream.ignore(static_cast<std::streamsize>((image_width * 3 + 3) / 4 * 4 - image_width * 3));
     }
     return image;
 }
@@ -170,9 +169,7 @@ void SaveImage(const Image& image, const char* path) {
             Write(image_stream, static_cast<uint8_t>(g * std::numeric_limits<uint8_t>::max()));
             Write(image_stream, static_cast<uint8_t>(r * std::numeric_limits<uint8_t>::max()));
         }
-        for (size_t written_row = 3 * sizeof(uint8_t) * image.Width(); written_row < row_size; ++written_row) {
-            image_stream.write("\0", 1);
-        }
+        image_stream.write("\0\0\0", static_cast<std::streamsize>(row_size - 3 * image.Width()));
         image_stream.flush();
     }
     image_stream.close();
