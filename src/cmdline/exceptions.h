@@ -14,7 +14,7 @@ private:
 
 class ArgParserError : public ErrorWithMessage {
 public:
-    explicit ArgParserError(const std::string& msg);
+    using ErrorWithMessage::ErrorWithMessage;
 };
 
 class ArgumentParseError : public ErrorWithMessage {
@@ -29,5 +29,5 @@ public:
 
 class ParserError : public ErrorWithMessage {
 public:
-    explicit ParserError(const std::string& msg);
+    using ErrorWithMessage::ErrorWithMessage;
 };
